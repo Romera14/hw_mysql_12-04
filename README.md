@@ -11,16 +11,13 @@
 - количество пользователей, закреплённых в этом магазине.
 
 ```
-SELECT title, `length` 
-from film
-WHERE `length` > (SELECT AVG(`length`) from film)
-
-SELECT MONTH(p.payment_date) AS mounth, COUNT(r.rental_date) as rentals, SUM(p.amount) as amount_mounth
-FROM payment p
-INNER JOIN rental r ON p.rental_id = r.rental_id 
-GROUP BY MONTH(p.payment_date)
-ORDER BY amount_mounth DESC
-LIMIT 1
+SELECT CONCAT(s.first_name,' ', s.last_name) as name, c.city, count(s.store_id) as clients
+from staff s 
+INNER JOIN address a ON s.address_id = a.address_id 
+INNER JOIN city c ON a.city_id = c.city_id 
+INNER JOIN customer c2 ON s.store_id = c2.store_id
+GROUP BY CONCAT(s.first_name,' ', s.last_name), c.city
+HAVING clients > 300
 ```
 
 ### Задание 2
@@ -38,10 +35,10 @@ WHERE `length` > (SELECT AVG(`length`) from film)
 Получите информацию, за какой месяц была получена наибольшая сумма платежей, и добавьте информацию по количеству аренд за этот месяц.
 
 ```
-SELECT MONTH(p.payment_date) AS mounth, COUNT(r.rental_date) as rentals, SUM(p.amount) as amount_mounth
+SELECT DATE_FORMAT(p.payment_date, '%Y-%M') AS mounth, COUNT(r.rental_date) as rentals, SUM(p.amount) as amount_mounth
 FROM payment p
 INNER JOIN rental r ON p.rental_id = r.rental_id 
-GROUP BY MONTH(p.payment_date)
+GROUP BY mounth
 ORDER BY amount_mounth DESC
 LIMIT 1
 ```
