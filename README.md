@@ -51,13 +51,13 @@ LIMIT 1
 Посчитайте количество продаж, выполненных каждым продавцом. Добавьте вычисляемую колонку «Премия». Если количество продаж превышает 8000, то значение в колонке будет «Да», иначе должно быть значение «Нет».
 
 ```
-SELECT CONCAT(s.first_name,' ', s.last_name) as name, COUNT(r.rental_id),
+SELECT CONCAT(s.first_name,' ', s.last_name) as name, COUNT(p.amount),
 	CASE
-		WHEN COUNT(r.rental_id) > 8000 THEN 'YES'
+		WHEN COUNT(p.amount) > 8000 THEN 'YES'
 		ELSE 'NO'
 	END AS bonus
-FROM rental r
-INNER JOIN staff s ON r.staff_id = s.staff_id
+FROM payment p
+INNER JOIN staff s ON p.staff_id = s.staff_id
 GROUP BY name
 ```
 
